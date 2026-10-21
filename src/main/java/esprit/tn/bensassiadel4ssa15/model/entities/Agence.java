@@ -18,6 +18,7 @@ public class Agence {
     private String nom;
 
     private String ville;
+
     private String adresse;
     private String telephone;
 
