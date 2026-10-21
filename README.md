@@ -48,7 +48,7 @@ Le domaine couvre la gestion d'une agence de location de véhicules :
 | Persistance | Spring Data JPA / Hibernate |
 | Base de données | MySQL (`mysql-connector-j`) |
 | Build | Maven (wrapper inclus) |
-| Outils | Lombok (getters/setters) |
+| Outils | Lombok (getters/setters), springdoc-openapi (Swagger UI) |
 
 ## Structure du projet
 
@@ -148,6 +148,36 @@ L'application démarre sur **http://localhost:8805**.
 
 ```bash
 curl http://localhost:8805/hello
+```
+
+### Documentation Swagger / OpenAPI
+
+La documentation est générée automatiquement par **springdoc-openapi** :
+
+| Ressource | URL |
+|-----------|-----|
+| Swagger UI | http://localhost:8805/swagger-ui.html |
+| OpenAPI JSON | http://localhost:8805/v3/api-docs |
+| OpenAPI YAML | http://localhost:8805/v3/api-docs.yaml |
+
+La configuration globale (titre, version, contact, serveur) se trouve dans
+`src/main/java/esprit/tn/bensassiadel4ssa15/config/OpenApiConfig.java`.
+
+Pour documenter un endpoint, utilisez les annotations `@Operation` et `@ApiResponse` ;
+pour regrouper des endpoints, utilisez `@Tag` sur le contrôleur :
+
+```java
+@RestController
+@Tag(name = "Véhicule", description = "Gestion des véhicules")
+public class VehiculeRestController {
+
+    @Operation(summary = "Endpoint de test")
+    @ApiResponse(responseCode = "200", description = "Message retourné avec succès")
+    @GetMapping("/hello")
+    public ResponseEntity<String> helloWorld() {
+        return ResponseEntity.ok("Hello World!");
+    }
+}
 ```
 
 > Les contrôleurs REST des autres entités seront ajoutés progressivement.
