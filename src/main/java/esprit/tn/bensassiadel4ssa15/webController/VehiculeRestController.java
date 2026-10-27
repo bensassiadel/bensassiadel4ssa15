@@ -1,6 +1,6 @@
 package esprit.tn.bensassiadel4ssa15.webController;
 
-import esprit.tn.bensassiadel4ssa15.domain.interfaces.IVehiculeService;
+import esprit.tn.bensassiadel4ssa15.Services.IVehiculeService;
 import esprit.tn.bensassiadel4ssa15.model.entities.Vehicule;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
