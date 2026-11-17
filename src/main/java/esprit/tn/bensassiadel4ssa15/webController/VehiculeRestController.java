@@ -3,13 +3,18 @@ package esprit.tn.bensassiadel4ssa15.webController;
 import esprit.tn.bensassiadel4ssa15.Services.IVehiculeService;
 import esprit.tn.bensassiadel4ssa15.model.entities.Vehicule;
 import io.swagger.v3.oas.annotations.Operation;
+
+import java.util.List;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +45,57 @@ public class VehiculeRestController {
     public ResponseEntity<Vehicule> createVehicule(@RequestBody Vehicule newVehicule) {
         Vehicule savedVehicule = iVehiculeService.createVehicule(newVehicule);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedVehicule);
+    }
+
+    @Operation(
+            summary = "Récupérer un véhicule par son identifiant",
+            description = "Retourne le véhicule correspondant à l'identifiant fourni."
+    )
+    @ApiResponse(responseCode = "200", description = "Véhicule trouvé")
+    @ApiResponse(responseCode = "404", description = "Aucun véhicule trouvé avec cet identifiant")
+    @GetMapping("/vehicule/{id}")
+    public ResponseEntity<Vehicule> getVehiculeById(@PathVariable Long id) {
+        Vehicule vehicule = iVehiculeService.getVehiculeById(id);
+        if (vehicule == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(vehicule);
+    }
+
+    @Operation(
+            summary = "Récupérer tous les véhicules",
+            description = "Retourne la liste complète des véhicules enregistrés en base de données."
+    )
+    @ApiResponse(responseCode = "200", description = "Liste des véhicules retournée avec succès")
+    @GetMapping("/vehicules")
+    public ResponseEntity<List<Vehicule>> getAllVehicules() {
+        return ResponseEntity.ok(iVehiculeService.getAllVehicules());
+    }
+
+    @Operation(
+            summary = "Mettre à jour un véhicule",
+            description = "Met à jour les données du véhicule correspondant à l'identifiant fourni."
+    )
+    @ApiResponse(responseCode = "200", description = "Véhicule mis à jour avec succès")
+    @ApiResponse(responseCode = "404", description = "Aucun véhicule trouvé avec cet identifiant")
+    @PutMapping("/vehicule/{id}")
+    public ResponseEntity<Vehicule> updateVehicule(@PathVariable Long id, @RequestBody Vehicule vehicule) {
+        Vehicule updatedVehicule = iVehiculeService.updateVehicule(id, vehicule);
+        if (updatedVehicule == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedVehicule);
+    }
+
+    @Operation(
+            summary = "Supprimer un véhicule",
+            description = "Supprime le véhicule correspondant à l'identifiant fourni."
+    )
+    @ApiResponse(responseCode = "204", description = "Véhicule supprimé avec succès")
+    @DeleteMapping("/vehicule/{id}")
+    public ResponseEntity<Void> deleteVehicule(@PathVariable Long id) {
+        iVehiculeService.deleteVehicule(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(
